@@ -26,12 +26,7 @@ export default mongoose.model(
       account: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Account",
-      },
-      role: {
-        type: String,
-        enum: ["CUSTOMER", "STAFF"],
-        default: "CUSTOMER",
-      },
+      }
     },
     {
       versionKey: false,

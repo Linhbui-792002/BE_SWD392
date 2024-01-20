@@ -1,4 +1,6 @@
 import express from "express";
+import cors from "cors";
+
 import {
   getListCustomer,
   getOneCustomer,
@@ -8,7 +10,14 @@ import {
 } from "../controller/customers.js";
 
 const customersRouter = express.Router();
-
+customersRouter.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
+);
 customersRouter.get("/", getListCustomer);
 
 customersRouter.get("/:id", getOneCustomer);

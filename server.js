@@ -7,6 +7,7 @@ import customersRouter from "./routes/customers.js";
 import booksRouter from "./routes/books.js";
 import cartRouter from "./routes/cart.js";
 import orderRouter from "./routes/order.js";
+import authRouter from "./routes/auth.js";
 
 const app = express();
 const port = process.env.PORT || 9999;
@@ -19,6 +20,8 @@ app.use("/books", booksRouter);
 app.use("/cart", cartRouter);
 
 app.use("/order", orderRouter);
+
+app.use("/login", authRouter);
 
 app.listen(port, async () => {
   await connect();

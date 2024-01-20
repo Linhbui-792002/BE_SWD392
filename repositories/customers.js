@@ -49,6 +49,13 @@ const addCustomer = async ({ phone, email, fullname, addresses, account }) => {
       throw new Error("Customer exists");
     }
 
+    const existingAccount = await Account.findOne({
+      username: account.username
+    }).exec();
+      if (existingAccount) {
+      throw new Error("account exists");
+    }
+
     const fullnameModel = new Fullname({
       _id: new mongoose.Types.ObjectId(),
       ...fullname,
@@ -132,6 +139,7 @@ const editCustomer = async ({
       if (existingAccount) {
         existingAccount.username = account.username || existingAccount.username;
         existingAccount.password = account.password || existingAccount.password;
+        existingAccount.role = account.role || existingAccount.role;
         await existingAccount.save();
       }
     }
