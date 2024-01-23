@@ -5,6 +5,8 @@ import {
   getOneCustomerById,
   getAllCustomer,
 } from "../repositories/customers.js";
+import mongoose from "mongoose";
+import { checkResObjectId } from "../unit/vailadate.js";
 
 const getListCustomer = async (req, res) => {
   try {
@@ -24,6 +26,13 @@ const getListCustomer = async (req, res) => {
 const getOneCustomer = async (req, res) => {
   try {
     const customerId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid customer ID",
+      });
+    }
+
     const customer = await getOneCustomerById({ customerId });
     res.status(200).json({
       status: 200,
@@ -74,6 +83,12 @@ const updateCustomer = async (req, res) => {
 const deleteCustomer = async (req, res) => {
   try {
     const customerId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid customer ID",
+      });
+    }
     const customer = await deletedCustomer({ customerId });
     res.status(200).json({
       status: 200,

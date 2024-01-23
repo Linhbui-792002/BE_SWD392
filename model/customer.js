@@ -12,6 +12,7 @@ export default mongoose.model(
       email: {
         type: String,
         required: true,
+        unique: true,
       },
       fullname: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +27,7 @@ export default mongoose.model(
       account: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Account",
-      }
+      },
     },
     {
       versionKey: false,

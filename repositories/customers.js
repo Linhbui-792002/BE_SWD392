@@ -24,12 +24,16 @@ const getAllCustomer = async () => {
 
 const getOneCustomerById = async ({ customerId }) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      throw new Error("Invalid customer ID");
+    }
     const existingCustomer = await Customer.findById(customerId)
       .populate("fullname")
       .populate("addresses")
       .populate("account")
       .exec();
     if (!existingCustomer) {
+      return null;
       throw new Error("Customer not found");
     }
 
@@ -50,9 +54,9 @@ const addCustomer = async ({ phone, email, fullname, addresses, account }) => {
     }
 
     const existingAccount = await Account.findOne({
-      username: account.username
+      username: account.username,
     }).exec();
-      if (existingAccount) {
+    if (existingAccount) {
       throw new Error("account exists");
     }
 
@@ -108,8 +112,13 @@ const editCustomer = async ({
   account,
 }) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      return null;
+      throw new Error("Invalid customer ID");
+    }
     const existingCustomer = await Customer.findById(customerId).exec();
     if (!existingCustomer) {
+      return null;
       throw new Error("Customer not found");
     }
 
@@ -202,6 +211,9 @@ const editCustomer = async ({
 
 const deletedCustomer = async ({ customerId }) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      throw new Error("Invalid customer ID");
+    }
     const existingCustomer = await Customer.findById(customerId).exec();
     if (!existingCustomer) {
       throw new Error("Customer not found");

@@ -2,6 +2,8 @@ import {
   createCart,
   deleteCartById,
   getCartByCustomerId,
+  deleteCartItem,
+  updateCartItemQuantity,
 } from "../repositories/cart.js";
 import mongoose from "mongoose";
 
@@ -60,12 +62,18 @@ const deleteCart = async (req, res) => {
     const isValidObjectId = mongoose.isValidObjectId(cartId);
 
     if (!isValidObjectId && cartId) {
-      return res.status(400).json({ status: 400, error: "Invalid ObjectId" });
+      res.status(400).json({ status: 400, error: "Invalid ObjectId" });
     }
 
     const cart = await deleteCartById({ cartId });
-
-    return res.status(200).json({
+    if (!cart) {
+      res.status(404).json({
+        status: 404,
+        message: "Delete cart error",
+      });
+      return;
+    }
+    res.status(200).json({
       status: 200,
       message: "Delete cart successfully",
       data: cart,
@@ -79,4 +87,46 @@ const deleteCart = async (req, res) => {
   }
 };
 
-export { getCart, creatCartItem, deleteCart };
+const updateCartItem = async (req, res) => {
+  try {
+    const { cartId, bookItemId, newQuantity } = req.body;
+
+    const updatedCart = await updateCartItemQuantity({
+      cartId,
+      bookItemId,
+      newQuantity,
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: "Update cart item quantity successfully",
+      data: updatedCart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: error.toString(),
+    });
+  }
+};
+
+const deleteCartItems = async (req, res) => {
+  try {
+    const { cartId, bookItemId } = req.body;
+    console.log({ cartId, bookItemId },"{ cartId, bookItemId }");
+    const updatedCart = await deleteCartItem({ cartId, bookItemId });
+
+    res.status(200).json({
+      status: 200,
+      message: "Delete cart item successfully",
+      data: updatedCart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: error.toString(),
+    });
+  }
+};
+
+export { getCart, creatCartItem, deleteCart, updateCartItem, deleteCartItems };

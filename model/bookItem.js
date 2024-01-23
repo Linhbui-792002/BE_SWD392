@@ -11,8 +11,7 @@ export default mongoose.model(
       },
       quantity: {
         type: Number,
-        required: true,
-      }
+      },
     },
     {
       versionKey: false,

@@ -24,8 +24,7 @@ const createOrderByCustomerId = async ({
   }
 };
 
-
-const deleteOrderByOrderId = async ({orderId}) => {
+const deleteOrderByOrderId = async ({ orderId }) => {
   try {
     const isValidObjectId = mongoose.isValidObjectId(orderId);
     if (!isValidObjectId) {
@@ -45,16 +44,22 @@ const deleteOrderByOrderId = async ({orderId}) => {
   }
 };
 
-const getListOrderByCustomerId = async ({customerId})=>{
-    try {
-
+const getListOrderByCustomerId = async ({ customerId }) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      throw new Error("Invalid customer ID");
+    }
     const orders = await Order.find({ customer: customerId });
 
-    return orders.map(order => ({ ...order._doc }));
+    return orders.map((order) => ({ ...order._doc }));
   } catch (error) {
     console.error(error);
     throw new Error("An error occurred while getting the list of orders");
   }
-}
+};
 
-export { createOrderByCustomerId ,deleteOrderByOrderId, getListOrderByCustomerId};
+export {
+  createOrderByCustomerId,
+  deleteOrderByOrderId,
+  getListOrderByCustomerId,
+};

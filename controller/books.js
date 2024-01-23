@@ -76,7 +76,8 @@ const deleteBook = async (req, res) => {
 
 const getlistBook = async (req, res) => {
   try {
-    const listBook = await getAllBook();
+    const name = req.query.name || "";
+    const listBook = await getAllBook({ name });
     res.status(200).json({
       status: 200,
       message: "get list book successfully",
@@ -91,8 +92,8 @@ const getlistBook = async (req, res) => {
 };
 
 const getOneBook = async (req, res) => {
-     try {
-        const bookId = req.params.id;
+  try {
+    const bookId = req.params.id;
 
     const isValidObjectId = mongoose.isValidObjectId(bookId);
 
@@ -100,7 +101,7 @@ const getOneBook = async (req, res) => {
       res.status(400).json({ status: 400, error: "Invalid ObjectId" });
     }
 
-    const book = await getBookById({bookId});
+    const book = await getBookById({ bookId });
     res.status(200).json({
       status: 200,
       message: "get one book successfully",
@@ -113,5 +114,6 @@ const getOneBook = async (req, res) => {
     });
   }
 };
+
 
 export { createBook, updateBook, deleteBook, getlistBook, getOneBook };
